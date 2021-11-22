@@ -267,7 +267,7 @@ function setupGui() {
   h.add( effectController, "lhue", 0.0, 1.0, 0.025 ).name( "hue" ).onChange( render_gui );
   h.add( effectController, "lsaturation", 0.0, 1.0, 0.025 ).name( "saturation" ).onChange( render_gui );
   h.add( effectController, "llightness", 0.0, 1.0, 0.025 ).name( "lightness" ).onChange( render_gui );
-  h.add( effectController, "ldistance", 0.0, 6.0, 0.01 ).name( "distance" ).onChange( render_gui );
+  h.add( effectController, "ldistance", 0.0, 10.0, 0.01 ).name( "distance" ).onChange( render_gui );
 
 }
 
