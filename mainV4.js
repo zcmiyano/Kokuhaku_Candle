@@ -245,6 +245,12 @@ function setupGui() {
   lintensity: 0.5,
   ldistance: 6,
 
+  // candle text 4 numbers
+  one: "0",
+  two: "9",
+  three: "3",
+  four: "0",
+
   };
 
   let h;
@@ -258,8 +264,7 @@ function setupGui() {
   h.add( effectController, "hue", 0.0, 1.0, 0.025 ).name( "hue" ).onChange( render_gui );
   h.add( effectController, "saturation", 0.0, 1.0, 0.025 ).name( "saturation" ).onChange( render_gui );
   h.add( effectController, "lightness", 0.0, 1.0, 0.025 ).name( "lightness" ).onChange( render_gui );
-
-       
+ 
   // candle light 2
 
   h = gui.addFolder( "Candle Lighting" );
@@ -268,6 +273,18 @@ function setupGui() {
   h.add( effectController, "lsaturation", 0.0, 1.0, 0.025 ).name( "saturation" ).onChange( render_gui );
   h.add( effectController, "llightness", 0.0, 1.0, 0.025 ).name( "lightness" ).onChange( render_gui );
   h.add( effectController, "ldistance", 0.0, 10.0, 0.01 ).name( "distance" ).onChange( render_gui );
+
+  // candle text 4 numbers
+
+  h = gui.addFolder( "Candle Number" );
+  h.add( effectController, "one", [ "0", "1", "2", "3", "4", 
+    "5", "6", "7", "8", "9"] ).name( "First Num" ).onChange( render_num );
+  h.add( effectController, "two", [ "0", "1", "2", "3", "4", 
+    "5", "6", "7", "8", "9"] ).name( "Second Num" ).onChange( render_num );
+  h.add( effectController, "three", [ "0", "1", "2", "3", "4", 
+    "5", "6", "7", "8", "9"] ).name( "Third Num" ).onChange( render_num );
+  h.add( effectController, "four", [ "0", "1", "2", "3", "4", 
+    "5", "6", "7", "8", "9"] ).name( "Fourth Num" ).onChange( render_num );
 
 }
 
@@ -299,6 +316,14 @@ function render_gui(){
     candleLight2List[i].color.setHSL( effectController.lhue, effectController.lsaturation, effectController.llightness );
     candleLight2List[i].distance = effectController.ldistance;
   }
+}
+
+function render_num(){
+    // String from effect controller [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    // effectController.one
+    // effectController.two
+    // effectController.three
+    // effectController.four
 }
 
 function PeachHeart(r,dx,dy,callback){
