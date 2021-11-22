@@ -31,6 +31,13 @@ function main() {
 function init() {
 
   scene = new THREE.Scene();
+  const textureCube = new THREE.CubeTextureLoader()
+    .setPath('skybox/')
+    // .setPath('star_sky/')
+    .load(['front.jpg', 'back.jpg', 'top.jpg', 'bottom.jpg', 'right.jpg', 'left.jpg']);
+    textureCube.mapping = THREE.EquirectangularReflectionMapping;
+  scene.background = textureCube;
+
   // camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
   // camera.position.set(3, 20, 8).setLength(100);
   camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000);
@@ -170,6 +177,9 @@ function flame(isFrontSide, x, z){
 function table() {
   // table
   var tableGeo = new THREE.CylinderBufferGeometry(50, 50, 0.5, 64);
+  // var tableGeo = new THREE.BoxGeometry(100, 0.5, 100);
+  // var axesHelper = new THREE.AxesHelper( 5 );
+  // scene.add( axesHelper );
   tableGeo.translate(0, -0.25, 0);
   var tableMat = new THREE.MeshStandardMaterial({map: new THREE.TextureLoader().load("https://threejs.org/examples/textures/hardwood2_diffuse.jpg"), metalness: 0, roughness: 0.75});
   tableMesh = new THREE.Mesh(tableGeo, tableMat);
