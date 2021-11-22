@@ -32,10 +32,11 @@ function init() {
 
   scene = new THREE.Scene();
   const textureCube = new THREE.CubeTextureLoader()
-    .setPath('skybox/')
-    // .setPath('star_sky/')
-    .load(['front.jpg', 'back.jpg', 'top.jpg', 'bottom.jpg', 'right.jpg', 'left.jpg']);
-    textureCube.mapping = THREE.EquirectangularReflectionMapping;
+    // .setPath('skybox/')
+    // .load(['front.jpg', 'back.jpg', 'top.jpg', 'bottom.jpg', 'right.jpg', 'left.jpg']);
+    .setPath('star_sky/')
+    .load(['front.jpeg', 'back.jpeg', 'top.jpeg', 'bottom.jpeg', 'right.jpeg', 'left.jpeg']);
+  textureCube.mapping = THREE.EquirectangularReflectionMapping;
   scene.background = textureCube;
 
   // camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
