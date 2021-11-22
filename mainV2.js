@@ -407,6 +407,7 @@ function initStats(container2) {
   container2.appendChild(stats.domElement);
 }
 
+
 /*
 
 // This is an alternative way to implement the initStates()
