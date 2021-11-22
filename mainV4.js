@@ -1,4 +1,4 @@
-let container, stats;
+let container1, container2, stats;
 
 let camera, scene, renderer, controls;
 
@@ -9,6 +9,9 @@ let tableMesh;
 var flameMaterials = [];
 var candleList = [];
 var candleLight2List = [];
+
+// GUI
+let effectController;
 
 main();
 
@@ -25,11 +28,14 @@ function main() {
   
   table();
   window.addEventListener('resize', onWindowResize, false);
+  // GUI
+  setupGui();
 }
 
 
 function init() {
 
+  //scene
   scene = new THREE.Scene();
   const textureCube = new THREE.CubeTextureLoader()
     // .setPath('skybox/')
@@ -45,13 +51,29 @@ function init() {
   camera.position.set(0, 500, 200).setLength(100);
 
 
+  // renderer
   renderer = new THREE.WebGLRenderer({antialias: true});
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setClearColor(0x101005);
   renderer.shadowMap.enabled = false; // true
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  document.body.appendChild(renderer.domElement);
+  container1 = document.createElement('div');
+  document.body.appendChild(container1);
+  container1.appendChild(renderer.domElement);
 
+  // stats
+  stats = new Stats();
+  stats.setMode(0);
+
+  stats.domElement.style.position = 'absolute';
+  stats.domElement.style.left = '0px';
+  stats.domElement.style.top = '0px';
+  container2 = document.createElement('div');
+  
+  document.body.appendChild(container2);
+  container2.appendChild(stats.domElement);
+
+  // controls
   controls = new THREE.OrbitControls(camera, renderer.domElement);
   controls.enablePan = false;
   controls.minPolarAngle = THREE.Math.degToRad(60);
@@ -206,10 +228,54 @@ function onWindowResize() {
   renderer.setSize( window.innerWidth, window.innerHeight);
 }
 
+
+function setupGui() {
+
+  effectController = {
+
+  // candle paraffin color
+  hue: 0.166666,
+  saturation: 1,
+  lightness: 0.8,
+
+  // candle light 2
+  lhue: 0.097222,
+  lsaturation: 1,  
+  llightness: 0.6,
+  lintensity: 0.5,
+  ldistance: 6,
+
+  };
+
+  let h;
+
+  const gui = new dat.GUI();
+
+  // candle paraffin color
+
+  h = gui.addFolder( "Candle paraffin color" );
+
+  h.add( effectController, "hue", 0.0, 1.0, 0.025 ).name( "hue" ).onChange( render_gui );
+  h.add( effectController, "saturation", 0.0, 1.0, 0.025 ).name( "saturation" ).onChange( render_gui );
+  h.add( effectController, "lightness", 0.0, 1.0, 0.025 ).name( "lightness" ).onChange( render_gui );
+
+       
+  // candle light 2
+
+  h = gui.addFolder( "Candle Lighting" );
+
+  h.add( effectController, "lhue", 0.0, 1.0, 0.025 ).name( "hue" ).onChange( render_gui );
+  h.add( effectController, "lsaturation", 0.0, 1.0, 0.025 ).name( "saturation" ).onChange( render_gui );
+  h.add( effectController, "llightness", 0.0, 1.0, 0.025 ).name( "lightness" ).onChange( render_gui );
+  h.add( effectController, "ldistance", 0.0, 6.0, 0.01 ).name( "distance" ).onChange( render_gui );
+
+}
+
 var clock = new THREE.Clock();
 var time = 0;
 
 render();
+
 function render(){
   requestAnimationFrame(render);
   time += clock.getDelta();
@@ -221,7 +287,18 @@ function render(){
     candleLight2List[i].intensity = 2 + Math.sin(time * Math.PI * 2) * Math.cos(time * Math.PI * 1.5) * 0.25;
   }
   controls.update();
+  stats.update();
   renderer.render(scene, camera);
+}
+
+function render_gui(){
+  // console.log(candleList[0].material.color.getHSL());
+  // console.log(candleLight2List[0].color.getHSL());
+  for (let i = 0; i < candleList.length; i++) {
+    candleList[i].material.color.setHSL( effectController.hue, effectController.saturation, effectController.lightness );
+    candleLight2List[i].color.setHSL( effectController.lhue, effectController.lsaturation, effectController.llightness );
+    candleLight2List[i].distance = effectController.ldistance;
+  }
 }
 
 function PeachHeart(r,dx,dy,callback){
@@ -237,3 +314,5 @@ function PeachHeart(r,dx,dy,callback){
       callback(x,y);
     }
 }
+
+
