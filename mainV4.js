@@ -18,7 +18,7 @@ let effectController;
 
 class Fly {
   constructor() {
-    this.group = new THREE.Group();
+    this.flyLight;
     this.drawLight();
   }
   drawLight() {
@@ -27,12 +27,14 @@ class Fly {
     //   color: 0xB1E770,
     //   shading: THREE.FlatShading,
     // }));
-    const flyLight = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial( {
+    const flyMat = new THREE.MeshStandardMaterial( {
         emissive: 0xB1E770,
         emissiveIntensity: 1,
         color: 0xB1E770
-    }));
-    this.group.add(flyLight);
+    });
+    this.flyLight = new THREE.Mesh(geometry, flyMat);
+    // console.log(flyMat.color.getHSL());
+    // this.group.add(flyLight);
 
     // flyLight.rotation.y = 45 * (Math.PI / 180);
 
@@ -275,16 +277,20 @@ function setupGui() {
   effectController = {
 
   // candle paraffin color
-  hue: 0.166666,
+  hue: 0.167,
   saturation: 1,
   lightness: 0.8,
 
   // candle light 2
-  lhue: 0.097222,
+  lhue: 0.097,
   lsaturation: 1,  
   llightness: 0.6,
-  lintensity: 0.5,
   ldistance: 6,
+
+  // firefly light color
+  fhue: 0.242,
+  fsaturation: 0.713,  
+  flightness: 0.673,
 
   // candle text 4 numbers
   one: "0",
@@ -314,6 +320,14 @@ function setupGui() {
   h.add( effectController, "lsaturation", 0.0, 1.0, 0.025 ).name( "saturation" ).onChange( render_gui );
   h.add( effectController, "llightness", 0.0, 1.0, 0.025 ).name( "lightness" ).onChange( render_gui );
   h.add( effectController, "ldistance", 0.0, 10.0, 0.01 ).name( "distance" ).onChange( render_gui );
+  
+  // Firefly light
+
+  h = gui.addFolder( "Firefly Color" );
+
+  h.add( effectController, "fhue", 0.0, 1.0, 0.025 ).name( "hue" ).onChange( render_fireflies );
+  h.add( effectController, "fsaturation", 0.0, 1.0, 0.025 ).name( "saturation" ).onChange( render_fireflies );
+  h.add( effectController, "flightness", 0.0, 1.0, 0.025 ).name( "lightness" ).onChange( render_fireflies );
 
   // candle text 4 numbers
 
@@ -349,7 +363,7 @@ function render(){
     const xPos = 20 * Math.cos(time / 4 + index) + 10;
     const yPos = 5 * Math.sin(time / 6 * index) + 20;
     const zPos = 20 * Math.sin(time / 4 + index) + 10;
-    firefly.group.position.set(xPos, yPos, zPos);
+    firefly.flyLight.position.set(xPos, yPos, zPos);
   });
   controls.update();
   stats.update();
@@ -364,6 +378,14 @@ function render_gui(){
     candleLight2List[i].color.setHSL( effectController.lhue, effectController.lsaturation, effectController.llightness );
     candleLight2List[i].distance = effectController.ldistance;
   }
+
+}
+
+function render_fireflies(){
+  fireflies.forEach((firefly, index) => {
+    firefly.flyLight.material.color.setHSL( effectController.fhue, effectController.fsaturation, effectController.flightness );
+    firefly.flyLight.material.emissive.setHSL( effectController.fhue, effectController.fsaturation, effectController.flightness );
+  });
 }
 
 function render_num(){
@@ -393,12 +415,12 @@ function drawFireflies() {
   const rand = (min, max) => THREE.Math.randFloat(min, max);
   for (let i = 0; i < 15; i += 1) {
     const firefly = new Fly();
-    firefly.group.position.set(rand(-5, 20), rand(5, 20), rand(-5, 20));
+    firefly.flyLight.position.set(rand(-5, 20), rand(5, 20), rand(-5, 20));
 
     // const scale = rand(0.3, 1);
     // firefly.group.scale.set(scale, scale, scale);
 
-    scene.add(firefly.group);
+    scene.add(firefly.flyLight);
     fireflies.push(firefly);
   }
 }
