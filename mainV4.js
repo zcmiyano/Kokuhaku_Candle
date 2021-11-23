@@ -24,16 +24,23 @@ class Fly {
   }
   drawLight() {
     const geometry = new THREE.SphereBufferGeometry(0.25, 16, 8);
-    const flyLight = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({
-      color: 0xB1E770,
-      shading: THREE.FlatShading,
+    // const flyLight = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({
+    //   color: 0xB1E770,
+    //   shading: THREE.FlatShading,
+    // }));
+    const flyLight = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial( {
+        emissive: 0xB1E770,
+        emissiveIntensity: 1,
+        color: 0xB1E770
     }));
+    // this.group.add(flyLight);
+
     // flyLight.rotation.y = 45 * (Math.PI / 180);
 
-    const light = new THREE.PointLight(this.lightColor, 4, 15);
+    const light = new THREE.PointLight(this.lightColor, 2, 15);
     light.add(flyLight);
     light.position.set(0, 10, 0);
-    // light.castShadow = true;
+    light.castShadow = false;
     this.group.add(light);
   }
 }
