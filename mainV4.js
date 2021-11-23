@@ -10,24 +10,59 @@ var flameMaterials = [];
 var candleList = [];
 var candleLight2List = [];
 
+// fireflies
+let fireflies = [];
+
 // GUI
 let effectController;
+
+class Fly {
+  constructor(lightColor) {
+    this.group = new THREE.Group();
+    this.lightColor = lightColor;
+    this.drawLight();
+  }
+  drawLight() {
+    const geometry = new THREE.SphereBufferGeometry(0.25, 16, 8);
+    const flyLight = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({
+      color: 0xB1E770,
+      shading: THREE.FlatShading,
+    }));
+    // flyLight.rotation.y = 45 * (Math.PI / 180);
+
+    const light = new THREE.PointLight(this.lightColor, 4, 15);
+    light.add(flyLight);
+    light.position.set(0, 10, 0);
+    // light.castShadow = true;
+    this.group.add(light);
+  }
+}
 
 main();
 
 function main() {
   init();
+
+  // lonely candle
   // candle(0, 0);
   // flame(false, 0, 0);
   // flame(true, 0, 0);
+
+  // Peach heart
   PeachHeart(5, 0, 0,function(x, z) {
       candle(x, z);
       flame(false, x, z);
       flame(true, x, z);
   });
-  
+
+  // table
   table();
+
+  // fireflies
+  drawFireflies();
+
   window.addEventListener('resize', onWindowResize, false);
+
   // GUI
   setupGui();
 }
@@ -303,6 +338,13 @@ function render(){
     // candleLight2.position.z = 10 + Math.cos(time * Math.PI * 0.75) * 0.25;
     candleLight2List[i].intensity = 2 + Math.sin(time * Math.PI * 2) * Math.cos(time * Math.PI * 1.5) * 0.25;
   }
+
+  fireflies.forEach((firefly, index) => {
+    const xPos = 20 * Math.cos(time / 4 + index) + 10;
+    const yPos = 5 * Math.sin(time / 6 * index) + 15;
+    const zPos = 20 * Math.sin(time / 4 + index) + 10;
+    firefly.group.position.set(xPos, yPos, zPos);
+  });
   controls.update();
   stats.update();
   renderer.render(scene, camera);
@@ -340,4 +382,18 @@ function PeachHeart(r,dx,dy,callback){
     }
 }
 
+// Fireflies
+function drawFireflies() {
+  const rand = (min, max) => THREE.Math.randFloat(min, max);
+  for (let i = 0; i < 15; i += 1) {
+    const firefly = new Fly({ lightColor: 0x00FFA5 });
+    firefly.group.position.set(rand(-5, 20), rand(5, 15), rand(-5, 20));
+
+    // const scale = rand(0.3, 1);
+    // firefly.group.scale.set(scale, scale, scale);
+
+    scene.add(firefly.group);
+    fireflies.push(firefly);
+  }
+}
 
