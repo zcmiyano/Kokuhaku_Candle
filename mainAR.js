@@ -80,13 +80,14 @@ function init() {
 
   //scene
   scene = new THREE.Scene();
-  const textureCube = new THREE.CubeTextureLoader()
-    // .setPath('skybox/')
-    // .load(['front.jpg', 'back.jpg', 'top.jpg', 'bottom.jpg', 'right.jpg', 'left.jpg']);
-    .setPath('star_sky/')
-    .load(['front.jpeg', 'back.jpeg', 'top.jpeg', 'bottom.jpeg', 'right.jpeg', 'left.jpeg']);
-  textureCube.mapping = THREE.EquirectangularReflectionMapping;
-  scene.background = textureCube;
+  // scene.background = null;
+  // const textureCube = new THREE.CubeTextureLoader()
+  //   // .setPath('skybox/')
+  //   // .load(['front.jpg', 'back.jpg', 'top.jpg', 'bottom.jpg', 'right.jpg', 'left.jpg']);
+  //   .setPath('star_sky/')
+  //   .load(['front.jpeg', 'back.jpeg', 'top.jpeg', 'bottom.jpeg', 'right.jpeg', 'left.jpeg']);
+  // textureCube.mapping = THREE.EquirectangularReflectionMapping;
+  // scene.background = textureCube;
 
   // camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
   // camera.position.set(3, 20, 8).setLength(100);
@@ -95,13 +96,13 @@ function init() {
 
 
   // renderer
-  renderer = new THREE.WebGLRenderer({antialias: true});
+  renderer = new THREE.WebGLRenderer({ alpha: true });
+  // renderer.setClearColor( 0xffffff, 0 );
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setClearColor(0x101005);
   renderer.shadowMap.enabled = false; // true
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  container1 = document.createElement('div');
-  document.body.appendChild(container1);
+  container1 = document.getElementById("container1");
   container1.appendChild(renderer.domElement);
 
   // stats
@@ -111,9 +112,7 @@ function init() {
   stats.domElement.style.position = 'absolute';
   stats.domElement.style.left = '0px';
   stats.domElement.style.top = '0px';
-  container2 = document.createElement('div');
-  
-  document.body.appendChild(container2);
+  container2 = document.getElementById("container2");
   container2.appendChild(stats.domElement);
 
   // controls
@@ -298,6 +297,8 @@ function setupGui() {
   three: "3",
   four: "0",
 
+  ar: "false",
+
   };
 
   let h;
@@ -340,6 +341,10 @@ function setupGui() {
     "5", "6", "7", "8", "9"] ).name( "Third Num" ).onChange( render_num );
   h.add( effectController, "four", [ "0", "1", "2", "3", "4", 
     "5", "6", "7", "8", "9"] ).name( "Fourth Num" ).onChange( render_num );
+
+  // AR
+  h = gui.addFolder( "AR" );
+  h.add( effectController, "ar", [ "true", "false"] ).name( "AR" ).onChange( render_ar );
 
 }
 
@@ -394,6 +399,17 @@ function render_num(){
     // effectController.two
     // effectController.three
     // effectController.four
+}
+
+function render_ar(){
+  var vid = document.getElementById("video");
+  if (effectController.ar.localeCompare("true") == 0) {
+    renderer.setClearColor( 0xffffff, 0 );
+    vid.play();
+  } else {
+    renderer.setClearColor(0x101005);
+    vid.pause();
+  }
 }
 
 function PeachHeart(r,dx,dy,callback){
