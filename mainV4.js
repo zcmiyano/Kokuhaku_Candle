@@ -17,13 +17,12 @@ let fireflies = [];
 let effectController;
 
 class Fly {
-  constructor(lightColor) {
+  constructor() {
     this.group = new THREE.Group();
-    this.lightColor = lightColor;
     this.drawLight();
   }
   drawLight() {
-    const geometry = new THREE.SphereBufferGeometry(0.25, 16, 8);
+    const geometry = new THREE.SphereBufferGeometry(0.2, 16, 16);
     // const flyLight = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({
     //   color: 0xB1E770,
     //   shading: THREE.FlatShading,
@@ -33,15 +32,15 @@ class Fly {
         emissiveIntensity: 1,
         color: 0xB1E770
     }));
-    // this.group.add(flyLight);
+    this.group.add(flyLight);
 
     // flyLight.rotation.y = 45 * (Math.PI / 180);
 
-    const light = new THREE.PointLight(this.lightColor, 2, 15);
-    light.add(flyLight);
-    light.position.set(0, 10, 0);
-    light.castShadow = false;
-    this.group.add(light);
+    // const light = new THREE.PointLight(0x00FFA5, 1, 15);
+    // light.add(flyLight);
+    // light.position.set(0, 10, 0);
+    // light.castShadow = false;
+    // this.group.add(light);
   }
 }
 
@@ -348,7 +347,7 @@ function render(){
 
   fireflies.forEach((firefly, index) => {
     const xPos = 20 * Math.cos(time / 4 + index) + 10;
-    const yPos = 5 * Math.sin(time / 6 * index) + 15;
+    const yPos = 5 * Math.sin(time / 6 * index) + 20;
     const zPos = 20 * Math.sin(time / 4 + index) + 10;
     firefly.group.position.set(xPos, yPos, zPos);
   });
@@ -393,8 +392,8 @@ function PeachHeart(r,dx,dy,callback){
 function drawFireflies() {
   const rand = (min, max) => THREE.Math.randFloat(min, max);
   for (let i = 0; i < 15; i += 1) {
-    const firefly = new Fly({ lightColor: 0x00FFA5 });
-    firefly.group.position.set(rand(-5, 20), rand(5, 15), rand(-5, 20));
+    const firefly = new Fly();
+    firefly.group.position.set(rand(-5, 20), rand(5, 20), rand(-5, 20));
 
     // const scale = rand(0.3, 1);
     // firefly.group.scale.set(scale, scale, scale);
