@@ -10,6 +10,22 @@ var flameMaterials = [];
 var candleList = [];
 var candleLight2List = [];
 
+//four num
+var inputNumList = [];
+
+var numMeshList = [];
+var List1 = ["0"];
+var List2 = ["9"];
+var List3 = ["3"];
+var List4 = ["0"];
+var List = [List1,List2,List3,List4];
+
+var MeshListAtIndex1 = [];
+var MeshListAtIndex2 = [];
+var MeshListAtIndex3 = [];
+var MeshListAtIndex4 = [];
+var MeshListAtIndex = [MeshListAtIndex1,MeshListAtIndex2,MeshListAtIndex3,MeshListAtIndex4];
+
 // fireflies
 let fireflies = [];
 
@@ -46,6 +62,7 @@ class Fly {
   }
 }
 
+
 main();
 
 function main() {
@@ -57,11 +74,16 @@ function main() {
   // flame(true, 0, 0);
 
   // Peach heart
-  PeachHeart(5, 0, 0,function(x, z) {
+  PeachHeart(15, 0, 0,function(x, z) {
       candle(x, z);
       flame(false, x, z);
       flame(true, x, z);
   });
+  
+  var InitNumList = ["0","9","3","0"];
+  for (var m = 0; m < 4; m++) {
+    chooseDigit(InitNumList[m], m);
+  }
 
   // table
   table();
@@ -80,6 +102,9 @@ function init() {
 
   //scene
   scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x2a3c4b);
+  /*
+  scene = new THREE.Scene();
   const textureCube = new THREE.CubeTextureLoader()
     // .setPath('skybox/')
     // .load(['front.jpg', 'back.jpg', 'top.jpg', 'bottom.jpg', 'right.jpg', 'left.jpg']);
@@ -87,11 +112,15 @@ function init() {
     .load(['front.jpeg', 'back.jpeg', 'top.jpeg', 'bottom.jpeg', 'right.jpeg', 'left.jpeg']);
   textureCube.mapping = THREE.EquirectangularReflectionMapping;
   scene.background = textureCube;
+  */
 
   // camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
   // camera.position.set(3, 20, 8).setLength(100);
-  camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.1, 10000);
-  camera.position.set(0, 500, 200).setLength(100);
+  camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000);
+  camera.position.set(-100, 500, 200).setLength(100);
+
+  //camera.lookAt(new THREE.Vector3(0,0,0));
+  //camera.position.z = 5;
 
 
   // renderer
@@ -148,7 +177,7 @@ function candle(x, z) {
   var cylinderMat = new THREE.MeshStandardMaterial( {color: 0xffff99, metalness: 0, roughness: 0.75} );
   var cylinderMesh = new THREE.Mesh( cylinderGeo, cylinderMat);
 
-
+ 
   // // candle
   // var casePath = new THREE.Path();
   // casePath.moveTo(0, 0);
@@ -378,7 +407,6 @@ function render_gui(){
     candleLight2List[i].color.setHSL( effectController.lhue, effectController.lsaturation, effectController.llightness );
     candleLight2List[i].distance = effectController.ldistance;
   }
-
 }
 
 function render_fireflies(){
@@ -390,10 +418,72 @@ function render_fireflies(){
 
 function render_num(){
     // String from effect controller [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-    // effectController.one
-    // effectController.two
-    // effectController.three
-    // effectController.four
+    /*
+    if (effectController.one != List1[List1.length - 1]) {
+      List1.push(effectController.one);
+      chooseDigit(List1[List1.length - 1], 0);
+    }
+    if (effectController.two != List2[List2.length - 1]) {
+      List1.push(effectController.one);
+      chooseDigit(List2[List2.length - 1], 1);
+    }
+    if (effectController.three != List3[List3.length - 1]) {
+      List1.push(effectController.one);
+      chooseDigit(List3[List3.length - 1], 2);
+    }
+    if (effectController.four != List4[List4.length - 1]) {
+      List1.push(effectController.one);
+      chooseDigit(List4[List4.length - 1], 3);
+    }
+    */
+    if (effectController.four != List4[List4.length - 1]) {
+      console.log("effectController.four is changed");
+      List4.push(effectController.four);
+      chooseDigit(List4[List4.length - 1], 3);
+    }
+
+
+    if (effectController.one != List1[List1.length - 1]) {
+      console.log("effectController.one is changed");
+      List1.push(effectController.one);
+      chooseDigit(List1[List1.length - 1], 0);
+    } 
+    if (effectController.two != List2[List2.length - 1]) {
+      console.log("effectController.two is changed");
+      List2.push(effectController.two);
+      chooseDigit(List2[List2.length - 1], 1);
+    }
+    if (effectController.three != List3[List3.length - 1]) {
+      console.log("effectController.three is changed");
+      List3.push(effectController.three);
+      chooseDigit(List3[List3.length - 1], 2);
+    }
+    
+
+    /*
+    List1.push(effectController.one);
+    List2.push(effectController.two);
+    List3.push(effectController.three);
+    List4.push(effectController.four);
+   */ 
+
+    //last_element = List[List.length - 1];
+    
+    /*
+    inputNumList = [List1[List1.length - 1], 
+                    List2[List2.length - 1], 
+                    List3[List3.length - 1], 
+                    List4[List4.length - 1]
+                    ];
+
+
+    //oldNumList = inputNumList;
+
+    for (var m = 0; m < 4; m++) {
+      
+      chooseDigit(inputNumList[m], m);
+    }   
+    */ 
 }
 
 function PeachHeart(r,dx,dy,callback){
@@ -424,4 +514,286 @@ function drawFireflies() {
     fireflies.push(firefly);
   }
 }
+
+// four num
+function chooseDigit(candleShape,positionIndex) {
+
+
+  var DigitOne = [
+  [0,0,0,1],
+  [0,0,0,1],
+  [0,0,0,1],
+  [0,0,0,1],
+  [0,0,0,1],
+  [0,0,0,1],
+  [0,0,0,1]
+  ];
+  
+
+  var DigitTwo = [
+  [1,1,1,1],
+  [0,0,0,1],
+  [0,0,0,1],
+  [1,1,1,1],
+  [1,0,0,0],
+  [1,0,0,0],
+  [1,1,1,1]
+  ];
+
+  var DigitThree = [
+  [1,1,1,1],
+  [0,0,0,1],
+  [0,0,0,1],
+  [1,1,1,1],
+  [0,0,0,1],
+  [0,0,0,1],
+  [1,1,1,1]
+  ];
+
+  var DigitFour = [
+  [1,0,0,1],
+  [1,0,0,1],
+  [1,0,0,1],
+  [1,1,1,1],
+  [0,0,0,1],
+  [0,0,0,1],
+  [0,0,0,1]
+  ];
+
+  var DigitFive = [
+  [1,1,1,1],
+  [1,0,0,0],
+  [1,0,0,0],
+  [1,1,1,1],
+  [0,0,0,1],
+  [0,0,0,1],
+  [1,1,1,1]
+  ];
+
+  var DigitSix = [
+  [1,1,1,1],
+  [1,0,0,0],
+  [1,0,0,0],
+  [1,1,1,1],
+  [1,0,0,1],
+  [1,0,0,1],
+  [1,1,1,1]
+  ];
+
+   var DigitSeven = [
+  [1,1,1,1],
+  [1,0,0,1],
+  [1,0,0,1],
+  [1,0,0,1],
+  [0,0,0,1],
+  [0,0,0,1],
+  [0,0,0,1]
+  ];
+
+  var DigitEight = [
+  [1,1,1,1],
+  [1,0,0,1],
+  [1,0,0,1],
+  [1,1,1,1],
+  [1,0,0,1],
+  [1,0,0,1],
+  [1,1,1,1]
+  ];
+
+  var DigitNine = [
+  [1,1,1,1],
+  [1,0,0,1],
+  [1,0,0,1],
+  [1,1,1,1],
+  [0,0,0,1],
+  [0,0,0,1],
+  [1,1,1,1]
+  ];
+
+  var DigitZero = [
+  [1,1,1,1],
+  [1,0,0,1],
+  [1,0,0,1],
+  [1,0,0,1],
+  [1,0,0,1],
+  [1,0,0,1],
+  [1,1,1,1]
+  ];
+
+  switch(candleShape) {
+
+  case "0":
+    // code block
+    placeCandle(DigitZero,positionIndex);
+    break;
+  case "1":
+    // code block
+    placeCandle(DigitOne,positionIndex);
+    break;
+  case "2":
+    // code block
+    placeCandle(DigitTwo,positionIndex);
+    break;
+  case "3":
+    // code block
+    placeCandle(DigitThree,positionIndex);
+    break;
+  case "4":
+    // code block
+    placeCandle(DigitFour,positionIndex);
+    break;
+  case "5":
+    // code block
+    placeCandle(DigitFive,positionIndex);
+    break;
+  case "6":
+    // code block
+    placeCandle(DigitSix,positionIndex);
+    break;
+  case "7":
+    // code block
+    placeCandle(DigitSeven,positionIndex);
+    break;
+  case "8":
+    // code block
+    placeCandle(DigitEight,positionIndex);
+    break;
+  case "9":
+    // code block
+    placeCandle(DigitNine,positionIndex);
+    break;
+
+  default:
+    // "PeachHeart"
+    PeachHeart(5, 0, 0,function(x, z) {
+      //oneCandleToPackThemAllWithXZ(x, z);
+      candle(x, z);
+      flame(false, x, z);
+      flame(true, x, z);
+    });
+    
+  }
+}
+
+// four num helper function
+function placeCandle(inputMatrix, positionIndex) {
+  //scene.remove()
+  for(var k = 0; k < MeshListAtIndex[positionIndex].length; k++) {
+    scene.remove(MeshListAtIndex[positionIndex][k]);
+  }
+
+  MeshListAtIndex[positionIndex] = [];
+  
+  /*
+  switch(positionIndex) {
+    case 0:
+    // code block
+    for (var i = 0; i < MeshListAtIndex1.length; i++) {
+      scene.remove(MeshListAtIndex1[i]);
+    }
+    MeshListAtIndex1 = [];
+    break;
+
+    case 1:
+    // code block
+    for (var i = 0; i < MeshListAtIndex2.length; i++) {
+      scene.remove(MeshListAtIndex2[i]);
+    }
+    MeshListAtIndex2 = [];    
+    break;
+
+    case 2:
+    // code block
+    for (var i = 0; i < MeshListAtIndex3.length; i++) {
+      scene.remove(MeshListAtIndex3[i]);
+    }
+    MeshListAtIndex3 = [];    
+    break;
+
+    case 3:
+    // code block
+    for (var i = 0; i < MeshListAtIndex4.length; i++) {
+      scene.remove(MeshListAtIndex4[i]);
+    }
+    MeshListAtIndex4 = [];
+    break;
+
+  }
+  */
+
+  // Loop to init 2D array 
+  for (var i = 0; i < 7; i++) { 
+    for(var j = 0; j < 4; j++) {
+      if(inputMatrix[i][j] == 1) {
+
+        //x_i = 2*(i + 0*positionIndex);//naive map
+        x_i = 2*(i + 5);//naive map
+        z_j = 2*(j + 6*(positionIndex-2));//naive map
+
+        //place a candle at (z_j, x_i);
+        //candle(z_j, x_i);
+        //flame(false, z_j, x_i);
+        //flame(true, z_j, x_i);
+
+        placeCandleCylinderWithXZ(z_j, x_i, positionIndex);
+        
+      } 
+
+    }
+  }
+  console.log("placed a digit at");
+  console.log(positionIndex);
+}
+
+// four num object mesh
+function placeCandleCylinderWithXZ(x, z, positionIndex) {
+
+  var cylinderGeo = new THREE.CylinderGeometry( 0.6, 0.6, 2, 32 );//(r,r,h,num of faces)
+  cylinderGeo.translate(x, 0, z);//increase y to lift the cylinder up
+  //var cylinderMat = new THREE.MeshStandardMaterial( {color: 0xffff99, metalness: 0, roughness: 0.75} );
+  
+
+  var cylinderMat = new THREE.MeshStandardMaterial( {
+        emissive: 0xffff99,
+        emissiveIntensity: 1,
+        //color: 0xB1E770,
+        color: 0xffff99,
+        metalness: 0,
+        roughness: 0.75
+    });
+
+  var myCylinderMesh = new THREE.Mesh( cylinderGeo, cylinderMat );
+  
+
+  /*
+  switch(positionIndex) {
+    case 0:
+    // code block
+
+    MeshListAtIndex1.push(myCylinderMesh);
+    break;
+
+    case 1:
+    // code block
+    MeshListAtIndex2.push(myCylinderMesh);
+    break;
+
+    case 2:
+    // code block
+    MeshListAtIndex3.push(myCylinderMesh);
+    break;
+
+    case 3:
+    // code block
+    MeshListAtIndex4.push(myCylinderMesh);
+    break;
+
+  }*/
+
+  MeshListAtIndex[positionIndex].push(myCylinderMesh);
+
+  scene.add(myCylinderMesh);
+}
+
+
 
