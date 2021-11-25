@@ -503,7 +503,7 @@ function drawFireflies() {
   const rand = (min, max) => THREE.Math.randFloat(min, max);
   for (let i = 0; i < 15; i += 1) {
     const firefly = new Fly();
-    firefly.flyLight.position.set(rand(-5, 20), rand(5, 20), rand(-5, 20));
+    firefly.flyLight.position.set(rand(-5, 20), rand(4, 15), rand(-5, 20));
 
     // const scale = rand(0.3, 1);
     // firefly.group.scale.set(scale, scale, scale);
