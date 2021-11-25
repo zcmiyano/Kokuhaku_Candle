@@ -11,21 +11,14 @@ var candleList = [];
 var candleLight2List = [];
 
 //four num
-var inputNumList = [];
+var List = ["0","9","3","0"];
 
-var numMeshList = [];
-var List1 = ["0"];
-var List2 = ["9"];
-var List3 = ["3"];
-var List4 = ["0"];
-var List = [List1,List2,List3,List4];
-
+// var MeshListAtIndex = [[], [], [], []];
 var MeshListAtIndex1 = [];
 var MeshListAtIndex2 = [];
 var MeshListAtIndex3 = [];
 var MeshListAtIndex4 = [];
 var MeshListAtIndex = [MeshListAtIndex1,MeshListAtIndex2,MeshListAtIndex3,MeshListAtIndex4];
-
 
 // fireflies
 let fireflies = [];
@@ -40,26 +33,12 @@ class Fly {
   }
   drawLight() {
     const geometry = new THREE.SphereBufferGeometry(0.2, 16, 16);
-    // const flyLight = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({
-    //   color: 0xB1E770,
-    //   shading: THREE.FlatShading,
-    // }));
     const flyMat = new THREE.MeshStandardMaterial( {
         emissive: 0xB1E770,
         emissiveIntensity: 1,
         color: 0xB1E770
     });
     this.flyLight = new THREE.Mesh(geometry, flyMat);
-    // console.log(flyMat.color.getHSL());
-    // this.group.add(flyLight);
-
-    // flyLight.rotation.y = 45 * (Math.PI / 180);
-
-    // const light = new THREE.PointLight(0x00FFA5, 1, 15);
-    // light.add(flyLight);
-    // light.position.set(0, 10, 0);
-    // light.castShadow = false;
-    // this.group.add(light);
   }
 }
 
@@ -67,6 +46,9 @@ main();
 
 function main() {
   init();
+
+  // GUI
+  setupGui();
 
   // lonely candle
   // candle(0, 0);
@@ -92,11 +74,7 @@ function main() {
   drawFireflies();
 
   window.addEventListener('resize', onWindowResize, false);
-
-  // GUI
-  setupGui();
 }
-
 
 function init() {
 
@@ -314,6 +292,11 @@ function setupGui() {
   fsaturation: 0.713,  
   flightness: 0.673,
 
+  // number light color
+  nhue: 0.167,
+  nsaturation: 1,  
+  nlightness: 0.8,
+
   // candle text 4 numbers
   one: "0",
   two: "9",
@@ -352,6 +335,14 @@ function setupGui() {
   h.add( effectController, "fhue", 0.0, 1.0, 0.025 ).name( "hue" ).onChange( render_fireflies );
   h.add( effectController, "fsaturation", 0.0, 1.0, 0.025 ).name( "saturation" ).onChange( render_fireflies );
   h.add( effectController, "flightness", 0.0, 1.0, 0.025 ).name( "lightness" ).onChange( render_fireflies );
+
+  // Firefly light
+
+  h = gui.addFolder( "Number Color" );
+
+  h.add( effectController, "nhue", 0.0, 1.0, 0.025 ).name( "hue" ).onChange( render_num_color );
+  h.add( effectController, "nsaturation", 0.0, 1.0, 0.025 ).name( "saturation" ).onChange( render_num_color );
+  h.add( effectController, "nlightness", 0.0, 1.0, 0.025 ).name( "lightness" ).onChange( render_num_color );
 
   // candle text 4 numbers
 
@@ -418,72 +409,39 @@ function render_fireflies(){
 
 function render_num(){
     // String from effect controller [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-    /*
-    if (effectController.one != List1[List1.length - 1]) {
-      List1.push(effectController.one);
-      chooseDigit(List1[List1.length - 1], 0);
-    }
-    if (effectController.two != List2[List2.length - 1]) {
-      List1.push(effectController.one);
-      chooseDigit(List2[List2.length - 1], 1);
-    }
-    if (effectController.three != List3[List3.length - 1]) {
-      List1.push(effectController.one);
-      chooseDigit(List3[List3.length - 1], 2);
-    }
-    if (effectController.four != List4[List4.length - 1]) {
-      List1.push(effectController.one);
-      chooseDigit(List4[List4.length - 1], 3);
-    }
-    */
-    if (effectController.four != List4[List4.length - 1]) {
-      console.log("effectController.four is changed");
-      List4.push(effectController.four);
-      chooseDigit(List4[List4.length - 1], 3);
-    }
-
-
-    if (effectController.one != List1[List1.length - 1]) {
+    
+    if (effectController.one != List[0]) {
       console.log("effectController.one is changed");
-      List1.push(effectController.one);
-      chooseDigit(List1[List1.length - 1], 0);
+      List[0] = effectController.one;
+      chooseDigit(effectController.one, 0);
     } 
-    if (effectController.two != List2[List2.length - 1]) {
+    if (effectController.two != List[1]) {
       console.log("effectController.two is changed");
-      List2.push(effectController.two);
-      chooseDigit(List2[List2.length - 1], 1);
+      List[1] = effectController.two;
+      chooseDigit(effectController.two, 1);
     }
-    if (effectController.three != List3[List3.length - 1]) {
+    if (effectController.three != List[2]) {
       console.log("effectController.three is changed");
-      List3.push(effectController.three);
-      chooseDigit(List3[List3.length - 1], 2);
+      List[2] = effectController.three;
+      chooseDigit(effectController.three, 2);
     }
-    
+    if (effectController.four != List[3]) {
+      console.log("effectController.four is changed");
+      List[3] = effectController.four;
+      chooseDigit(effectController.four, 3);
+    }
+}
 
-    /*
-    List1.push(effectController.one);
-    List2.push(effectController.two);
-    List3.push(effectController.three);
-    List4.push(effectController.four);
-   */ 
+function render_num_color(){
+  // console.log(MeshListAtIndex[0][0].material.color.getHSL());
+  for (let i = 0; i < 4; ++i) {
+    for (let j = 0; j < MeshListAtIndex[i].length; ++j){
+      // console.log(i + " " + j);
+      MeshListAtIndex[i][j].material.color.setHSL( effectController.nhue, effectController.nsaturation, effectController.nlightness );
+      MeshListAtIndex[i][j].material.emissive.setHSL( effectController.nhue, effectController.nsaturation, effectController.nlightness );
+    }
+  }
 
-    //last_element = List[List.length - 1];
-    
-    /*
-    inputNumList = [List1[List1.length - 1], 
-                    List2[List2.length - 1], 
-                    List3[List3.length - 1], 
-                    List4[List4.length - 1]
-                    ];
-
-
-    //oldNumList = inputNumList;
-
-    for (var m = 0; m < 4; m++) {
-      
-      chooseDigit(inputNumList[m], m);
-    }   
-    */ 
 }
 
 function render_ar(){
@@ -491,9 +449,11 @@ function render_ar(){
   if (effectController.ar.localeCompare("true") == 0) {
     renderer.setClearColor( 0xffffff, 0 );
     vid.play();
+    scene.remove(tableMesh);
   } else {
     renderer.setClearColor(0x101005);
     vid.pause();
+    scene.add(tableMesh);
   }
 }
 
@@ -695,43 +655,6 @@ function placeCandle(inputMatrix, positionIndex) {
   }
 
   MeshListAtIndex[positionIndex] = [];
-  
-  /*
-  switch(positionIndex) {
-    case 0:
-    // code block
-    for (var i = 0; i < MeshListAtIndex1.length; i++) {
-      scene.remove(MeshListAtIndex1[i]);
-    }
-    MeshListAtIndex1 = [];
-    break;
-
-    case 1:
-    // code block
-    for (var i = 0; i < MeshListAtIndex2.length; i++) {
-      scene.remove(MeshListAtIndex2[i]);
-    }
-    MeshListAtIndex2 = [];    
-    break;
-
-    case 2:
-    // code block
-    for (var i = 0; i < MeshListAtIndex3.length; i++) {
-      scene.remove(MeshListAtIndex3[i]);
-    }
-    MeshListAtIndex3 = [];    
-    break;
-
-    case 3:
-    // code block
-    for (var i = 0; i < MeshListAtIndex4.length; i++) {
-      scene.remove(MeshListAtIndex4[i]);
-    }
-    MeshListAtIndex4 = [];
-    break;
-
-  }
-  */
 
   // Loop to init 2D array 
   for (var i = 0; i < 7; i++) { 
@@ -775,33 +698,10 @@ function placeCandleCylinderWithXZ(x, z, positionIndex) {
     });
 
   var myCylinderMesh = new THREE.Mesh( cylinderGeo, cylinderMat );
+
+  myCylinderMesh.material.color.setHSL( effectController.nhue, effectController.nsaturation, effectController.nlightness );
+  myCylinderMesh.material.emissive.setHSL( effectController.nhue, effectController.nsaturation, effectController.nlightness );
   
-
-  /*
-  switch(positionIndex) {
-    case 0:
-    // code block
-
-    MeshListAtIndex1.push(myCylinderMesh);
-    break;
-
-    case 1:
-    // code block
-    MeshListAtIndex2.push(myCylinderMesh);
-    break;
-
-    case 2:
-    // code block
-    MeshListAtIndex3.push(myCylinderMesh);
-    break;
-
-    case 3:
-    // code block
-    MeshListAtIndex4.push(myCylinderMesh);
-    break;
-
-  }*/
-
   MeshListAtIndex[positionIndex].push(myCylinderMesh);
 
   scene.add(myCylinderMesh);
