@@ -2,6 +2,8 @@ let container1, container2, stats;
 
 let camera, scene, renderer, controls;
 
+let textureCube;
+
 // let caseMesh;
 let tableMesh;
 // let candleLight;
@@ -76,13 +78,27 @@ function init() {
   //scene
   scene = new THREE.Scene();
   // scene.background = null;
-  // const textureCube = new THREE.CubeTextureLoader()
-  //   // .setPath('skybox/')
-  //   // .load(['front.jpg', 'back.jpg', 'top.jpg', 'bottom.jpg', 'right.jpg', 'left.jpg']);
-  //   .setPath('star_sky/')
-  //   .load(['front.jpeg', 'back.jpeg', 'top.jpeg', 'bottom.jpeg', 'right.jpeg', 'left.jpeg']);
-  // textureCube.mapping = THREE.EquirectangularReflectionMapping;
-  // scene.background = textureCube;
+  // ![back](https://user-images.githubusercontent.com/35625778/143350592-564b74cd-2861-4cba-8ef3-396417d7e7b7.JPG)
+  // ![bottom](https://user-images.githubusercontent.com/35625778/143350604-97c842a4-1b4e-4e4a-9d30-2455949d51b4.JPG)
+  // ![front](https://user-images.githubusercontent.com/35625778/143350624-1d727087-853c-4ef0-8d5f-be5c0080991f.JPG)
+  // ![left](https://user-images.githubusercontent.com/35625778/143350682-e0f7d121-31f9-4423-b78e-c8b59cf323c1.JPG)
+  // ![right](https://user-images.githubusercontent.com/35625778/143350705-eecff228-a92a-4fb6-8948-47d43effb7b7.JPG)
+  // ![top](https://user-images.githubusercontent.com/35625778/143350738-25c5c0c0-2815-41ea-be5b-60813b158472.JPG)
+
+  textureCube = new THREE.CubeTextureLoader()
+    // .setPath('skybox/')
+    // .load(['front.jpg', 'back.jpg', 'top.jpg', 'bottom.jpg', 'right.jpg', 'left.jpg']);
+    .setPath('star_sky/')
+    .load(['front.JPG', 'back.JPG', 'top.JPG', 'bottom.JPG', 'right.JPG', 'left.JPG']);
+    // .setPath('https://user-images.githubusercontent.com/35625778/')
+    // .load(['143350624-1d727087-853c-4ef0-8d5f-be5c0080991f.JPG.JPG', 
+    //   '143350592-564b74cd-2861-4cba-8ef3-396417d7e7b7.JPG', 
+    //   '143350738-25c5c0c0-2815-41ea-be5b-60813b158472.JPG', 
+    //   '143350604-97c842a4-1b4e-4e4a-9d30-2455949d51b4.JPG.JPG', 
+    //   '143350705-eecff228-a92a-4fb6-8948-47d43effb7b7.JPG', 
+    //   '143350682-e0f7d121-31f9-4423-b78e-c8b59cf323c1.JPG']);
+  textureCube.mapping = THREE.EquirectangularReflectionMapping;
+  scene.background = textureCube;
 
   // camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
   // camera.position.set(3, 20, 8).setLength(100);
@@ -444,10 +460,12 @@ function render_ar(){
     renderer.setClearColor( 0xffffff, 0 );
     vid.play();
     scene.remove(tableMesh);
+    scene.background = null;
   } else {
     renderer.setClearColor(0x101005);
     vid.pause();
     scene.add(tableMesh);
+    scene.background = textureCube;
   }
 }
 
