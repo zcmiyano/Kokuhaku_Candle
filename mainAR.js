@@ -405,7 +405,7 @@ function render(){
 
   fireflies.forEach((firefly, index) => {
     const xPos = 20 * Math.cos(time / 4 + index) + 10;
-    const yPos = 5 * Math.sin(time / 6 * index) + 20;
+    const yPos = 5 * Math.sin(time / 6 * index) + 15;
     const zPos = 20 * Math.sin(time / 4 + index) + 10;
     firefly.flyLight.position.set(xPos, yPos, zPos);
   });
@@ -503,7 +503,7 @@ function drawFireflies() {
   const rand = (min, max) => THREE.Math.randFloat(min, max);
   for (let i = 0; i < 15; i += 1) {
     const firefly = new Fly();
-    firefly.flyLight.position.set(rand(-5, 20), rand(4, 15), rand(-5, 20));
+    firefly.flyLight.position.set(rand(-5, 20), rand(5, 20), rand(-5, 20));
 
     // const scale = rand(0.3, 1);
     // firefly.group.scale.set(scale, scale, scale);
