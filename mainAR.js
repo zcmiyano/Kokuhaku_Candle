@@ -13,12 +13,7 @@ var candleLight2List = [];
 //four num
 var List = ["0","9","3","0"];
 
-// var MeshListAtIndex = [[], [], [], []];
-var MeshListAtIndex1 = [];
-var MeshListAtIndex2 = [];
-var MeshListAtIndex3 = [];
-var MeshListAtIndex4 = [];
-var MeshListAtIndex = [MeshListAtIndex1,MeshListAtIndex2,MeshListAtIndex3,MeshListAtIndex4];
+var MeshListAtIndex = [[], [], [], []];
 
 // fireflies
 let fireflies = [];
@@ -147,7 +142,6 @@ function candle(x, z) {
   cylinderGeo.translate(x, 0, z);//increase y to lift the cylinder up
   var cylinderMat = new THREE.MeshStandardMaterial( {color: 0xffff99, metalness: 0, roughness: 0.75} );
   var cylinderMesh = new THREE.Mesh( cylinderGeo, cylinderMat);
-
 
   // // candle
   // var casePath = new THREE.Path();
