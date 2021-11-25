@@ -71,6 +71,7 @@ function main() {
   drawFireflies();
 
   window.addEventListener('resize', onWindowResize, false);
+  //document.body.addEventListener( 'keydown', onKeyDown, false );
 }
 
 function init() {
@@ -102,8 +103,18 @@ function init() {
 
   // camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
   // camera.position.set(3, 20, 8).setLength(100);
+
   camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.1, 10000);
-  camera.position.set(0, 500, 200).setLength(100);
+  camera.position.set(0, 500, 100).setLength(100);
+  //camera.lookAt(0,2-40,-50);
+  //camera.translateY( 1000 );
+
+  /*
+  camera = new THREE.OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, 1, 1000 );
+  camera.position.set(0, 50, 10).setLength(100);
+  camera.lookAt(0,2,-50);
+  */
+
 
 
   // renderer
@@ -145,6 +156,8 @@ function init() {
   light.position.setScalar(10);
   scene.add(light);
   scene.add(new THREE.AmbientLight(0xffffff, 0.0625));
+
+  //document.body.addEventListener( 'keydown', onKeyDown, false );
 
 }
 
@@ -252,11 +265,13 @@ function flame(isFrontSide, x, z){
 
 function table() {
   // table
-  var tableGeo = new THREE.CylinderBufferGeometry(50, 50, 0.5, 64);
+  var tableGeo = new THREE.CylinderBufferGeometry(80, 80, 0.5, 64);
   // var tableGeo = new THREE.BoxGeometry(100, 0.5, 100);
   // var axesHelper = new THREE.AxesHelper( 5 );
   // scene.add( axesHelper );
-  tableGeo.translate(0, -0.25, 0);
+  //tableGeo.translate(0, -0.25, 0);
+  tableGeo.translate(0, -0.25, -30);
+
   var tableMat = new THREE.MeshStandardMaterial({map: new THREE.TextureLoader().load("https://threejs.org/examples/textures/hardwood2_diffuse.jpg"), metalness: 0, roughness: 0.75});
   tableMesh = new THREE.Mesh(tableGeo, tableMat);
   tableMesh.receiveShadow = false;
@@ -471,12 +486,12 @@ function render_ar(){
 
 function PeachHeart(r,dx,dy,callback){
   var m,n,x,y,i;
-    //i的最大值*自增长值等于10为合适
+    
     for(i = 0; i <= 25; i += 1){
       m = i;
       n = -r * (((Math.sin(i) * Math.sqrt(Math.abs(Math.cos(i)))) / (Math.sin(i) + 1.4)) - 2 * Math.sin(i) + 2);
       x = n * Math.cos(m) + dx;
-      y = n * Math.sin(m) + dy;
+      y = n * Math.sin(m) + dy - 30;
       // console.log(i+'|x:' + x+"|y:"+y);  
       //callback(i,x,y);
       callback(x,y);
@@ -696,7 +711,7 @@ function placeCandle(inputMatrix, positionIndex) {
 function placeCandleCylinderWithXZ(x, z, positionIndex) {
 
   var cylinderGeo = new THREE.CylinderGeometry( 0.6, 0.6, 2, 32 );//(r,r,h,num of faces)
-  cylinderGeo.translate(x, 0, z);//increase y to lift the cylinder up
+  cylinderGeo.translate(x, 0, z - 30);//increase y to lift the cylinder up
   //var cylinderMat = new THREE.MeshStandardMaterial( {color: 0xffff99, metalness: 0, roughness: 0.75} );
   
 
@@ -720,5 +735,18 @@ function placeCandleCylinderWithXZ(x, z, positionIndex) {
 }
 
 
+/*
+function onKeyDown() {
+  switch( event.keyCode ) {
+
+  case 87: // up
+  camera.position.z += 5;
+  break;
+
+  case 83: // down
+  camera.position.z -= 5;
+  break;
+}
 
 
+*/
